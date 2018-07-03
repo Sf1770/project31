@@ -27,6 +27,7 @@ class ViewController: UIViewController, UIWebViewDelegate, UITextFieldDelegate, 
 
     func setDefaultTitle(){
         title = "Multibrowser"
+        addressBar.placeholder = "Click the + to add a new browser window"
     }
     
     @objc func addWebView() {
@@ -57,8 +58,15 @@ class ViewController: UIViewController, UIWebViewDelegate, UITextFieldDelegate, 
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let webView = activeWebView, let address = addressBar.text{
-            if let url = URL(string: address){
-                webView.loadRequest(URLRequest(url: url))
+            if address.hasPrefix("https://www."){
+                if let url = URL(string: address){
+                    webView.loadRequest(URLRequest(url: url))
+                }
+            } else{
+                let correctAddress = "https://www." + address
+                if let url = URL(string: correctAddress){
+                    webView.loadRequest(URLRequest(url: url))
+                }
             }
         }
         textField.resignFirstResponder()
